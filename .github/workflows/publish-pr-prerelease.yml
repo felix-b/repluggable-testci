@@ -1,45 +1,47 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    branches: [ master ]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: nelonoel/branch-name@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: npm install
-      - run: npm run test -- --coverage --watchAll=false
-        
+      - run: yarn
+      - run: yarn test
+      - run: echo ${BRANCH_NAME}
+
       - name: Setup GIT
         run: |
           git reset --hard
           git config --local --list
-          git checkout master
+          git checkout -b ${BRANCH_NAME} --track origin/${BRANCH_NAME}
           git config user.email "$GH_EMAIL"
-          git config user.name "Francisco Hodge"
+          git config user.name "$GH_USER"
         env:
-            GH_EMAIL: ${{secrets.GH_EMAIL}}
+          GH_EMAIL: ${{secrets.GH_EMAIL}}
+          GH_USER: ${{secrets.GH_USER}}
           
       - name: Bump version
         run: |
           git reset --hard
-          npm version patch
-          npm run build
+          yarn version --prerelease
+          yarn build
           git add . || true
-          git commit -m "Build update" || true
-          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
+          git commit -m "Bump prerelease version" || true
+          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" HEAD:${BRANCH_NAME}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           
       - name: npm publish
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm run trypublish
+          npm publish
         env:
-            NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}

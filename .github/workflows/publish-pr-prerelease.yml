@@ -9,12 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: nelonoel/branch-name@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 12
       - run: yarn
       - run: yarn test
-        
+      - run: echo ${BRANCH_NAME}
+
       - name: Setup GIT
         run: |
           git reset --hard

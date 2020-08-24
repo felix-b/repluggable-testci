@@ -40,6 +40,6 @@ jobs:
       - name: npm publish
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm publish --dry-run
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}

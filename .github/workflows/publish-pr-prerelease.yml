@@ -19,7 +19,7 @@ jobs:
         run: |
           git reset --hard
           git config --local --list
-          git checkout master
+          git checkout -b ${BRANCH_NAME} --track origin/${BRANCH_NAME}
           git config user.email "$GH_EMAIL"
           git config user.name "$GH_USER"
         env:
@@ -33,7 +33,7 @@ jobs:
           yarn build
           git add . || true
           git commit -m "Bump prerelease version" || true
-          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
+          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" HEAD:${BRANCH_NAME}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           

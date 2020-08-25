@@ -1,0 +1,61 @@
+name: Pull Request Build
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+      - run: yarn test
+        
+#      - name: Setup GIT
+#        run: |
+#          git reset --hard
+#          git config --local --list
+#          git checkout master
+#          git config user.email "$GH_EMAIL"
+#          git config user.name "$GH_USER"
+#        env:
+#          GH_EMAIL: ${{secrets.GH_EMAIL}}
+#          GH_USER: ${{secrets.GH_USER}}
+          
+      - name: Output Run ID
+        run: echo ${{ github.run_id }}
+
+      - name: Output Run Number
+        run: echo ${{ github.run_number }}
+
+      - name: Output github.event.number
+        run: echo ${{ github.event.number }}
+
+      - name: Output github.event.issue.number
+        run: echo ${{ github.event.issue.number }}
+
+      - name: Bump version
+        run: |
+          git reset --hard
+          echo yarn version --prerelease --preid "pr$PR_ID.$BUILD_NUMBER" --no-git-tag-version
+          yarn version --prerelease --preid "pr$PR_ID.$BUILD_NUMBER" --no-git-tag-version
+          git status -vv
+          yarn build
+          git add . || true
+          git commit -m "Bump prerelease version" || true
+#          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PR_ID: ${{ github.event.number }}
+          BUILD_NUMBER: ${{ github.run_number }}
+          
+      - name: npm publish
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}

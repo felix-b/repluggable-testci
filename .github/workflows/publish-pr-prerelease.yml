@@ -41,7 +41,8 @@ jobs:
       - name: Bump version
         run: |
           git reset --hard
-          yarn version --prerelease --preid ${{ github.run_number }} --no-git-tag-version
+          yarn version --prerelease --preid $PR_ID --no-git-tag-version
+          yarn version --prepatch --preid $BUILD_NUMBER --no-git-tag-version
           git status -vv
           yarn build
           git add . || true
@@ -49,6 +50,8 @@ jobs:
 #          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PR_ID: ${{ github.event.number }}
+          BUILD_NUMBER: ${{ github.run_number }}
           
       - name: npm publish
         run: |

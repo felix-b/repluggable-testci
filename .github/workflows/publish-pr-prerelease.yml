@@ -41,8 +41,8 @@ jobs:
       - name: Bump version
         run: |
           git reset --hard
-          yarn version --prerelease --preid $PR_ID --no-git-tag-version
-          yarn version --prepatch --preid $BUILD_NUMBER --no-git-tag-version
+          echo yarn version --prerelease --preid "$PR_ID.$BUILD_NUMBER" --no-git-tag-version
+          yarn version --prerelease --preid "$PR_ID.$BUILD_NUMBER" --no-git-tag-version
           git status -vv
           yarn build
           git add . || true

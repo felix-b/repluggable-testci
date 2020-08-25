@@ -32,6 +32,12 @@ jobs:
       - name: Output Run Number
         run: echo ${{ github.run_number }}
 
+      - name: Output github.event.number
+        run: echo ${{ github.event.number }}
+
+      - name: Output github.event.issue.number
+        run: echo ${{ github.event.issue.number }}
+
       - name: Bump version
         run: |
           git reset --hard

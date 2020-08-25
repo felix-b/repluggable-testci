@@ -1,9 +1,9 @@
 /*!
  * 
  *   repluggable-testci v1.22.33
- *   https://github.com/hodgef/js-library-boilerplate-basic
+ *   https://https://github.com/felix-b/repluggable-testci
  * 
- *   Copyright (c) Francisco Hodge (https://github.com/hodgef)
+ *   Copyright (c) felix-b
  * 
  *   This source code is licensed under the MIT license found in the
  *   LICENSE file in the root directory of this source tree.

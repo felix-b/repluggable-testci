@@ -11,14 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hodgef/js-library-boilerplate-basic"
+    "url": "https://https://github.com/felix-b/repluggable-testci"
   },
-  "author": "Francisco Hodge <hello@franciscohodge.com> (https://github.com/hodgef)",
+  "author": "felix-b",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hodgef/js-library-boilerplate-basic/issues"
-  },
-  "homepage": "https://github.com/hodgef/js-library-boilerplate-basic",
   "keywords": [
     "library",
     "starter",

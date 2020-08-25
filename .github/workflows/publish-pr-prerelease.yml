@@ -15,25 +15,32 @@ jobs:
       - run: yarn
       - run: yarn test
         
-      - name: Setup GIT
-        run: |
-          git reset --hard
-          git config --local --list
-          git checkout master
-          git config user.email "$GH_EMAIL"
-          git config user.name "$GH_USER"
-        env:
-          GH_EMAIL: ${{secrets.GH_EMAIL}}
-          GH_USER: ${{secrets.GH_USER}}
+#      - name: Setup GIT
+#        run: |
+#          git reset --hard
+#          git config --local --list
+#          git checkout master
+#          git config user.email "$GH_EMAIL"
+#          git config user.name "$GH_USER"
+#        env:
+#          GH_EMAIL: ${{secrets.GH_EMAIL}}
+#          GH_USER: ${{secrets.GH_USER}}
           
+      - name: Output Run ID
+        run: echo ${{ github.run_id }}
+
+      - name: Output Run Number
+        run: echo ${{ github.run_number }}
+
       - name: Bump version
         run: |
           git reset --hard
-          yarn version --prerelease
+          yarn version --prerelease --preid ${{ github.run_number }} --no-git-tag-version
+          git status -vv
           yarn build
           git add . || true
           git commit -m "Bump prerelease version" || true
-          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
+#          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           

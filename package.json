@@ -1,6 +1,6 @@
 {
   "name": "repluggable-testci",
-  "version": "1.22.33",
+  "version": "1.22.34",
   "description": "Testing CI workflow for repluggable",
   "main": "build/index.js",
   "scripts": {
